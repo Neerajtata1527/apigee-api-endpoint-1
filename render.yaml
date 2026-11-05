@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: employee-management-api
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: employee-management-db
+          property: connectionString
+
+databases:
+  - name: employee-management-db
+    databaseName: employees
+    user: employee_api_user
+    # Choose an available plan in the Render dashboard if the free plan is unavailable.
+    plan: free
